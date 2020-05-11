@@ -24,9 +24,7 @@ const Part = ({ part, exercises }) => {
 };
 
 const Total = ({ exercises }) => {
-  return (
-    <p>Number of exercises {exercises[0] + exercises[1] + exercises[2]}</p>
-  );
+  return <p>Number of exercises {exercises.reduce((a, b) => a + b, 0)}</p>;
 };
 
 const App = () => {
