@@ -16,7 +16,7 @@ const Country = ({ country }) => {
 
   let weatherInformation;
   console.log(weatherInfo);
-  if (weatherInfo.length !== 0) {
+  if (weatherInfo.length !== 0 && !weatherInfo.error) {
     weatherInformation = (
       <div key={weatherInfo.location.name}>
         <p>{weatherInfo.location.name}</p>
