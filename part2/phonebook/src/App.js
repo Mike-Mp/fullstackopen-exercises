@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 const Filter = (props) => (
   <input onChange={props.handleSearch} value={props.search} />
@@ -31,11 +32,19 @@ const Persons = (props) => (
 );
 
 const App = () => {
-  const [persons, setPersons] = useState([{ name: "Arto Hellas" }]);
+  const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [search, setNewSearch] = useState("");
 
+  useEffect(() => {
+    console.log("effect");
+    axios
+      .get("http://localhost:3001/persons")
+      .then((res) => setPersons(res.data));
+  }, []);
+
+  console.log("render", persons.length, "persons");
   const handleSubmit = (e) => {
     e.preventDefault();
     const newPerson = {
