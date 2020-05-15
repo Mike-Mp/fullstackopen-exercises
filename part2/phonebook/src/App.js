@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import personService from "./services/persons";
 
 const Filter = (props) => (
   <input onChange={props.handleSearch} value={props.search} />
@@ -24,9 +24,12 @@ const PersonForm = (props) => (
 const Persons = (props) => (
   <div>
     {props.toShow.map((person) => (
-      <p key={person.name}>
-        {person.name} {person.number}
-      </p>
+      <div key={person.name}>
+        <p>
+          {person.name} {person.number}
+        </p>
+        <button onClick={() => props.handleDelete(person.id)}>delete</button>
+      </div>
     ))}
   </div>
 );
@@ -38,10 +41,7 @@ const App = () => {
   const [search, setNewSearch] = useState("");
 
   useEffect(() => {
-    console.log("effect");
-    axios
-      .get("http://localhost:3001/persons")
-      .then((res) => setPersons(res.data));
+    personService.getAll().then((res) => setPersons(res));
   }, []);
 
   console.log("render", persons.length, "persons");
@@ -63,10 +63,12 @@ const App = () => {
       return;
     }
 
-    console.log(persons);
-    setPersons(persons.concat(newPerson));
-    setNewName("");
-    setNewNumber("");
+    personService.postPerson(newPerson).then((res) => {
+      console.log(res);
+      setPersons(persons.concat(res));
+      setNewName("");
+      setNewNumber("");
+    });
   };
 
   const handleChange = (e) => {
@@ -79,6 +81,15 @@ const App = () => {
 
   const handleSearch = (e) => {
     setNewSearch(e.target.value);
+  };
+
+  const handleDelete = (id) => {
+    console.log(id);
+    if (window.confirm(`Do you really want to delete entry?`)) {
+      personService.deletePerson(id).then((res) => {
+        setPersons(persons.filter((p) => p.id !== id));
+      });
+    }
   };
 
   const toShow = persons.filter((person) =>
@@ -97,7 +108,7 @@ const App = () => {
         newNumber={newNumber}
       />
       <h2>Numbers</h2>
-      <Persons toShow={toShow} />
+      <Persons toShow={toShow} handleDelete={handleDelete} />
     </div>
   );
 };
