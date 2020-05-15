@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import personService from "./services/persons";
+import Notification from "./components/Notification";
 
 const Filter = (props) => (
   <input onChange={props.handleSearch} value={props.search} />
@@ -39,6 +40,7 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [search, setNewSearch] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     personService.getAll().then((res) => setPersons(res));
@@ -81,6 +83,8 @@ const App = () => {
     }
 
     if (found) {
+      setErrorMessage(`${newPerson.name} already exists.`);
+      setTimeout(() => setErrorMessage(null), 5000);
       return;
     }
 
@@ -89,6 +93,8 @@ const App = () => {
       setPersons(persons.concat(res));
       setNewName("");
       setNewNumber("");
+      setErrorMessage(`${newPerson.name} was added to phonebook.`);
+      setTimeout(() => setErrorMessage(null), 5000);
     });
   };
 
@@ -105,11 +111,20 @@ const App = () => {
   };
 
   const handleDelete = (id) => {
-    console.log(id);
+    let deletedPerson = persons.filter((p) => p.id === id);
+    console.log(deletedPerson);
     if (window.confirm(`Do you really want to delete entry?`)) {
-      personService.deletePerson(id).then((res) => {
-        setPersons(persons.filter((p) => p.id !== id));
-      });
+      personService
+        .deletePerson(id)
+        .then((res) => {
+          setPersons(persons.filter((p) => p.id !== id));
+        })
+        .catch((err) => {
+          setErrorMessage(`${deletedPerson} was already deleted from server`);
+          setTimeout(() => setErrorMessage(null), 5000);
+        });
+      setErrorMessage(`${deletedPerson[0].name} was deleted from the server.`);
+      setTimeout(() => setErrorMessage(null), 5000);
     }
   };
 
@@ -120,6 +135,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={errorMessage} />
       <Filter search={search} handleSearch={handleSearch} />
       <PersonForm
         handleChange={handleChange}
