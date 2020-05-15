@@ -17,7 +17,7 @@ var getAll = function getAll() {
   });
 };
 
-var update = function update(id, updatedPerson) {
+var updatePerson = function updatePerson(id, updatedPerson) {
   var result = _axios.default.put("http://localhost:3001/persons/".concat(id), updatedPerson).then(function (res) {
     return res.data;
   });
@@ -41,7 +41,7 @@ var deletePerson = function deletePerson(id) {
 
 var _default = {
   getAll: getAll,
-  update: update,
+  updatePerson: updatePerson,
   postPerson: postPerson,
   deletePerson: deletePerson
 };

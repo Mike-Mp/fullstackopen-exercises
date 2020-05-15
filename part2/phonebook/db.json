@@ -2,8 +2,18 @@
   "persons": [
     {
       "name": "Arto Hellas",
-      "number": "123",
+      "number": "4",
       "id": 1
+    },
+    {
+      "name": "kostas",
+      "number": "1241241241414124",
+      "id": 2
+    },
+    {
+      "name": "giorgos",
+      "number": "23",
+      "id": 3
     }
   ]
 }

@@ -52,12 +52,33 @@ const App = () => {
       number: newNumber,
     };
     let found;
+    let numberExist;
+    let personID;
     persons.forEach((person) => {
       if (person.name.toLowerCase() === newName.toLowerCase()) {
         alert(`${newName} is already added to phonebook`);
+        if (person.number !== newPerson.number) {
+          found = true;
+          numberExist = true;
+          personID = person.id;
+          return;
+        }
         found = true;
       }
     });
+    console.log(persons);
+    if (found && numberExist) {
+      if (
+        window.confirm(
+          `${newPerson.name} is already added to the phonebook. Replace the old number with a new one?`
+        )
+      ) {
+        personService
+          .updatePerson(personID, newPerson)
+          .then((res) => personService.getAll().then((res) => setPersons(res)));
+      }
+      return;
+    }
 
     if (found) {
       return;

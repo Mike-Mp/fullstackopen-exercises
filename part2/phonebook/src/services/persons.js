@@ -5,7 +5,7 @@ const getAll = () => {
   return result.then((res) => res.data);
 };
 
-const update = (id, updatedPerson) => {
+const updatePerson = (id, updatedPerson) => {
   const result = axios
     .put(`http://localhost:3001/persons/${id}`, updatedPerson)
     .then((res) => res.data);
@@ -25,7 +25,7 @@ const deletePerson = (id) => {
 
 export default {
   getAll,
-  update,
+  updatePerson,
   postPerson,
   deletePerson,
 };
