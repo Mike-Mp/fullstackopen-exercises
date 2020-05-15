@@ -14,8 +14,14 @@ var baseUrl = "http://localhost:3001/notes";
 var getAll = function getAll() {
   var request = _axios.default.get(baseUrl);
 
+  var nonExisting = {
+    id: 10000,
+    content: "This is not saved to server",
+    date: "2019-05-30T17L30L31.098Z",
+    important: true
+  };
   return request.then(function (res) {
-    return res.data;
+    return res.data.concat(nonExisting);
   });
 };
 
