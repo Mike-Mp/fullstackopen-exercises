@@ -11,6 +11,11 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 var express = require("express");
 
 var app = express();
+
+var cors = require("cors");
+
+app.use(cors());
+app.use(express["static"]("build"));
 app.use(express.json());
 var notes = [{
   id: 1,
@@ -74,7 +79,7 @@ app["delete"]("/api/notes/:id", function (req, res) {
   });
   res.status(204).end();
 });
-var PORT = 3001;
+var PORT = process.env.PORT || 3001;
 app.listen(PORT, function () {
   console.log("Server running on port ".concat(PORT));
 });

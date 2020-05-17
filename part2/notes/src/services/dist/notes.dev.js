@@ -9,7 +9,7 @@ var _axios = _interopRequireDefault(require("axios"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-var baseUrl = "http://localhost:3001/api/notes";
+var baseUrl = "/api/notes";
 
 var getAll = function getAll() {
   var request = _axios["default"].get(baseUrl);
