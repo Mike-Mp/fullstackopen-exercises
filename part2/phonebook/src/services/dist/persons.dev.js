@@ -3,14 +3,16 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = void 0;
+exports["default"] = void 0;
 
 var _axios = _interopRequireDefault(require("axios"));
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+var baseUrl = "/api/persons";
 
 var getAll = function getAll() {
-  var result = _axios.default.get("http://localhost:3001/persons");
+  var result = _axios["default"].get(baseUrl);
 
   return result.then(function (res) {
     return res.data;
@@ -18,7 +20,7 @@ var getAll = function getAll() {
 };
 
 var updatePerson = function updatePerson(id, updatedPerson) {
-  var result = _axios.default.put("http://localhost:3001/persons/".concat(id), updatedPerson).then(function (res) {
+  var result = _axios["default"].put("".concat(baseUrl, "/").concat(id), updatedPerson).then(function (res) {
     return res.data;
   });
 
@@ -26,7 +28,7 @@ var updatePerson = function updatePerson(id, updatedPerson) {
 };
 
 var postPerson = function postPerson(newPerson) {
-  var result = _axios.default.post("http://localhost:3001/persons", newPerson);
+  var result = _axios["default"].post(baseUrl, newPerson);
 
   return result.then(function (res) {
     return res.data;
@@ -34,7 +36,7 @@ var postPerson = function postPerson(newPerson) {
 };
 
 var deletePerson = function deletePerson(id) {
-  var result = _axios.default.delete("http://localhost:3001/persons/".concat(id));
+  var result = _axios["default"]["delete"]("".concat(baseUrl, "/").concat(id));
 
   return result;
 };
@@ -45,4 +47,4 @@ var _default = {
   postPerson: postPerson,
   deletePerson: deletePerson
 };
-exports.default = _default;
+exports["default"] = _default;
