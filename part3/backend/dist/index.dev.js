@@ -39,9 +39,15 @@ app.get("/api/notes", function _callee(req, res) {
     }
   });
 });
-app.get("/api/notes/:id", function (req, res) {
+app.get("/api/notes/:id", function (req, res, next) {
   Note.findById(req.params.id).then(function (note) {
-    res.json(note);
+    if (note) {
+      res.json(note);
+    } else {
+      res.status(404).end();
+    }
+  })["catch"](function (error) {
+    return next(error);
   });
 });
 app.post("/api/notes", function (req, res) {
@@ -62,13 +68,41 @@ app.post("/api/notes", function (req, res) {
     res.json(savedNote);
   });
 });
-app["delete"]("/api/notes/:id", function (req, res) {
-  var id = Number(req.params.id);
-  notes = notes.filter(function (n) {
-    return n.id !== id;
+app.put("/api/notes/:id", function (req, res, next) {
+  var body = req.body;
+  var note = {
+    content: body.content,
+    important: body.important
+  };
+  Note.findByIdAndUpdate(req.params.id, note, {
+    "new": true
+  }).then(function (updatedNote) {
+    res.json(updatedNote);
+  })["catch"](function (error) {
+    return next(error);
   });
-  res.status(204).end();
 });
+app["delete"]("/api/notes/:id", function (req, res, next) {
+  Note.findByIdAndRemove(req.params.id).then(function (result) {
+    return res.status(204).end();
+  })["catch"](function (error) {
+    return next(error);
+  });
+});
+
+var errorHandler = function errorHandler(error, req, res, next) {
+  console.log("error message: ", error.message);
+
+  if (error.name === "CastError") {
+    return res.status(400).send({
+      error: "malformatted id"
+    });
+  }
+
+  next(error);
+};
+
+app.use(errorHandler);
 var PORT = process.env.PORT || 3001;
 app.listen(PORT, function () {
   console.log("Server running on port ".concat(PORT));
