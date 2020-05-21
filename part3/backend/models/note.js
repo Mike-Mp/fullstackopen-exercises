@@ -12,8 +12,15 @@ mongoose
   });
 
 const noteSchema = new mongoose.Schema({
-  content: String,
-  date: Date,
+  content: {
+    type: String,
+    minlength: 5,
+    required: "You must provide content",
+  },
+  date: {
+    type: Date,
+    required: true,
+  },
   important: Boolean,
 });
 

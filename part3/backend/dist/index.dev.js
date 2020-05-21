@@ -50,7 +50,7 @@ app.get("/api/notes/:id", function (req, res, next) {
     return next(error);
   });
 });
-app.post("/api/notes", function (req, res) {
+app.post("/api/notes", function (req, res, next) {
   var body = req.body;
 
   if (body.content === undefined) {
@@ -65,7 +65,11 @@ app.post("/api/notes", function (req, res) {
     date: new Date()
   });
   note.save().then(function (savedNote) {
-    res.json(savedNote);
+    return savedNote.toJSON();
+  }).then(function (savedAndFormattedNote) {
+    return res.json(savedAndFormattedNote);
+  })["catch"](function (error) {
+    return next(error);
   });
 });
 app.put("/api/notes/:id", function (req, res, next) {
@@ -96,6 +100,10 @@ var errorHandler = function errorHandler(error, req, res, next) {
   if (error.name === "CastError") {
     return res.status(400).send({
       error: "malformatted id"
+    });
+  } else if (error.name === "ValidationError") {
+    return res.status(400).json({
+      error: error.message
     });
   }
 
