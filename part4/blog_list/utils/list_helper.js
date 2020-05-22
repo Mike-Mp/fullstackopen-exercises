@@ -1,3 +1,5 @@
+const _ = require("lodash");
+
 const dummy = (blogs) => {
   return 1;
 };
@@ -34,8 +36,27 @@ const favoriteBlog = (blogList) => {
   return { blogPost, highestLiked };
 };
 
+// try it with lodash
+// const mostBlogs = (blogsList) => {
+//   let valuesList;
+//   _.mapValues(blogsList, (blog) => {
+//     console.log(blog);
+//     valuesList = blog.likes;
+//   });
+//   console.log(valuesList);
+// };
+
+const mostBlogs = (blogsList) => {
+  let authorList = {};
+
+  blogsList.forEach((blog) => {
+    authorList[blog.author] += 1;
+  });
+};
+
 module.exports = {
   dummy,
   totalLikes,
   favoriteBlog,
+  mostBlogs,
 };
