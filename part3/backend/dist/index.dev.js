@@ -10,8 +10,6 @@ var cors = require("cors");
 
 var Note = require("./models/note");
 
-var mongoose = require("mongoose");
-
 app.use(cors());
 app.use(express["static"]("build"));
 app.use(express.json());
@@ -87,7 +85,7 @@ app.put("/api/notes/:id", function (req, res, next) {
   });
 });
 app["delete"]("/api/notes/:id", function (req, res, next) {
-  Note.findByIdAndRemove(req.params.id).then(function (result) {
+  Note.findByIdAndRemove(req.params.id).then(function () {
     return res.status(204).end();
   })["catch"](function (error) {
     return next(error);

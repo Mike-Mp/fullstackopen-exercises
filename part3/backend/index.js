@@ -3,7 +3,6 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const Note = require("./models/note");
-const mongoose = require("mongoose");
 
 app.use(cors());
 
@@ -70,7 +69,7 @@ app.put("/api/notes/:id", (req, res, next) => {
 
 app.delete("/api/notes/:id", (req, res, next) => {
   Note.findByIdAndRemove(req.params.id)
-    .then((result) => res.status(204).end())
+    .then(() => res.status(204).end())
     .catch((error) => next(error));
 });
 

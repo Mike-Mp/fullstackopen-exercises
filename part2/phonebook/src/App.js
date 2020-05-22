@@ -46,16 +46,17 @@ const App = () => {
     personService.getAll().then((res) => setPersons(res));
   }, []);
 
-  console.log("render", persons.length, "persons");
   const handleSubmit = (e) => {
     e.preventDefault();
     const newPerson = {
       name: newName,
       number: newNumber,
     };
+
     let found;
     let numberExist;
     let personID;
+
     persons.forEach((person) => {
       if (person.name.toLowerCase() === newName.toLowerCase()) {
         alert(`${newName} is already added to phonebook`);
@@ -68,7 +69,7 @@ const App = () => {
         found = true;
       }
     });
-    console.log(persons);
+
     if (found && numberExist) {
       if (
         window.confirm(
@@ -88,14 +89,22 @@ const App = () => {
       return;
     }
 
-    personService.postPerson(newPerson).then((res) => {
-      console.log(res);
-      setPersons(persons.concat(res));
-      setNewName("");
-      setNewNumber("");
-      setErrorMessage(`${newPerson.name} was added to phonebook.`);
-      setTimeout(() => setErrorMessage(null), 5000);
-    });
+    personService
+      .postPerson(newPerson)
+      .then((res) => {
+        console.log(res);
+        setPersons(persons.concat(res));
+        setNewName("");
+        setNewNumber("");
+        setErrorMessage(`${newPerson.name} was added to phonebook.`);
+        setTimeout(() => setErrorMessage(null), 5000);
+      })
+      .catch((error) => {
+        setNewName("");
+        setNewNumber("");
+        setErrorMessage(error.response.data.error);
+        setTimeout(() => setErrorMessage(null), 6000);
+      });
   };
 
   const handleChange = (e) => {
