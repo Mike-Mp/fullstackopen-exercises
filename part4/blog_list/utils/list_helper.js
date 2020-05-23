@@ -50,6 +50,10 @@ const mostBlogs = (blogsList) => {
   let authorList = {};
 
   blogsList.forEach((blog) => {
+    authorList[blog.author] = 0;
+  });
+
+  blogsList.forEach((blog) => {
     authorList[blog.author] += 1;
   });
 };
@@ -60,3 +64,4 @@ module.exports = {
   favoriteBlog,
   mostBlogs,
 };
+``;
