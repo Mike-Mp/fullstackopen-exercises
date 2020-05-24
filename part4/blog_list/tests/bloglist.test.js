@@ -70,6 +70,12 @@ test("if title and url properties are missing, response is '400 Bad Request'", a
   expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length);
 });
 
+// describe("when a blog is deleted", () => {
+//   test("blog is actually deleted", async () => {
+//     const blogToBeDeleted = ""
+//   })
+// })
+
 afterAll(() => {
   mongoose.connection.close();
 });
