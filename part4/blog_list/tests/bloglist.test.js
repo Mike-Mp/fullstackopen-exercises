@@ -31,8 +31,6 @@ test("content type is json", async () => {
 test("unique identifier is named 'id'", async () => {
   const blogList = await api.get("/api/blogs");
 
-  console.log(blogList.body);
-
   expect(blogList.body[0].id).toBeDefined();
 });
 
@@ -72,9 +70,12 @@ test("if title and url properties are missing, response is '400 Bad Request'", a
 
 // describe("when a blog is deleted", () => {
 //   test("blog is actually deleted", async () => {
-//     const blogToBeDeleted = ""
-//   })
-// })
+//     // const blogsBefore = await Blog.find({});
+
+//     await api.delete("api/blogs/5eccaf4fabdf614c13ce6b19").expect(204);
+//     return;
+//   });
+// });
 
 afterAll(() => {
   mongoose.connection.close();
