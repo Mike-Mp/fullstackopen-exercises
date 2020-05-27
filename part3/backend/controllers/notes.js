@@ -18,13 +18,19 @@ notesRouter.get("/:id", async (request, response) => {
 notesRouter.post("/", async (request, response, next) => {
   const body = request.body;
 
+  const user = await user.findById(body.userId);
+
   const note = new Note({
     content: body.content,
     important: body.important || false,
     date: new Date(),
+    user: user._id,
   });
 
   const savedNote = await note.save();
+  user.notes = user.notes.concat(savedNote._id);
+  await user.save();
+
   response.json(savedNote.toJSON());
 });
 
