@@ -3,7 +3,10 @@ const usersRouter = require("express").Router();
 const bcrypt = require("bcrypt");
 
 usersRouter.get("/", async (req, res) => {
-  const users = await User.find({});
+  const users = await User.find({}).populate("blogs", {
+    title: 1,
+    author: 1,
+  });
   res.json(users.map((u) => u.toJSON()));
 });
 
@@ -28,7 +31,7 @@ usersRouter.post("/", async (req, res, next) => {
 
   try {
     const savedUser = await newUser.save();
-    res.json(savedUser);
+    res.json(savedUser.toJSON());
   } catch (exception) {
     next(exception);
   }
