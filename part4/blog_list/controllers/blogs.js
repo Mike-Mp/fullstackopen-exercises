@@ -1,6 +1,7 @@
 const blogRouter = require("express").Router();
 const Blog = require("../models/blog");
 const User = require("../models/user");
+const jwt = require("jsonwebtoken");
 
 blogRouter.get("/", async (request, response, next) => {
   try {
@@ -16,8 +17,14 @@ blogRouter.get("/", async (request, response, next) => {
 
 blogRouter.post("/", async (request, response, next) => {
   const body = request.body;
+  const token = request.token;
+  const decodedToken = jwt.verify(token, process.env.SECRET);
 
-  const user = await User.findById(body.userId);
+  if (!token || !decodedToken.id) {
+    return response.status(401).json({ error: "token missing or invalid" });
+  }
+
+  const user = await User.findById(decodedToken.id);
 
   const blog = new Blog({
     title: body.title,
@@ -56,6 +63,18 @@ blogRouter.put("/:id", async (request, response, next) => {
 });
 
 blogRouter.delete("/:id", async (request, response, next) => {
+  const token = request.token;
+  const decodedToken = jwt.verify(token, process.env.SECRET);
+  console.log(token, decodedToken);
+  if (!token || !decodedToken.id) {
+    return response.status(401).json({ error: "token missing or invalid" });
+  }
+
+  const blog = await Blog.findById(request.params.id);
+  if (!(blog.user.toString() === decodedToken.id.toString())) {
+    return response.status(401).json({ error: "Authorization restricted" });
+  }
+
   try {
     await Blog.findByIdAndRemove(request.params.id);
     response.status(204).end();

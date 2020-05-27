@@ -1,10 +1,11 @@
 POST http://localhost:3001/api/blogs
 Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIyIiwiaWQiOiI1ZWNlMzdhMjc0ODMwNTNjNDRhNjRjOTkiLCJpYXQiOjE1OTA1ODgyMzJ9.eicg4r0BcuImN7XOPzEehieVMh9Vbtui6ImcurgxAFQ
 
 {
-    "title": "HTML is easy",
+    "title": "Learning JWT lel",
     "author": "Robin Wieruch",
-    "url": "www.someurl6.com",
+    "url": "www.2omeurl0.com",
     "likes": 50,
     "userId": "5ece36f09bc2653b1c93bd12"
 }
