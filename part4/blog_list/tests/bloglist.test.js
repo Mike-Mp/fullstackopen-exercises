@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const supertest = require("supertest");
 const app = require("../app");
 const Blog = require("../models/blog");
+const User = require("../models/user");
 const helper = require("./bloglisthelper");
 
 const api = supertest(app);
@@ -16,7 +17,6 @@ beforeEach(async () => {
 
 // verify that the blog list application returns the correct amount of blog posts in the JSON format
 test("returns the right amount of blogs", async () => {
-  // const blogList = await api.get("/api/blogs");
   const blogList = await Blog.find({});
   expect(blogList).toHaveLength(helper.initialBlogs.length);
 });
@@ -35,6 +35,25 @@ test("unique identifier is named 'id'", async () => {
 });
 
 test("succesfully creates a new blog post", async () => {
+  // Create a user
+  const newUser = {
+    username: "johnstew11",
+    name: "John Stewart",
+    password: "123",
+  };
+
+  await api.post("/api/users").send(newUser);
+  // POST login with user credentials
+  const token = await api
+    .post("/api/login")
+    .send({
+      username: "johnstew11",
+      password: "123",
+    })
+    .expect(200);
+  console.log(token.text);
+  // Create blog with user token
+
   const newBlog = {
     title: "title3",
     author: "author3",
@@ -43,6 +62,7 @@ test("succesfully creates a new blog post", async () => {
 
   await api
     .post("/api/blogs")
+    .set("Authorization", token.text)
     .send(newBlog)
     .expect(201)
     .expect("Content-Type", /json/);
@@ -67,15 +87,6 @@ test("if title and url properties are missing, response is '400 Bad Request'", a
   const blogsAtEnd = await helper.allBlogs();
   expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length);
 });
-
-// describe("when a blog is deleted", () => {
-//   test("blog is actually deleted", async () => {
-//     // const blogsBefore = await Blog.find({});
-
-//     await api.delete("api/blogs/5eccaf4fabdf614c13ce6b19").expect(204);
-//     return;
-//   });
-// });
 
 afterAll(() => {
   mongoose.connection.close();

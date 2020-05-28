@@ -1,4 +1,10 @@
 const Blog = require("../models/blog");
+// const User = require("../models/user");
+// const axios = require("axios");
+
+// const initialUsers = async () => {
+//   await axios.post("/api/users", { username: "johnstew11", name: "John Steward", password: "123" })
+// };
 
 const initialBlogs = [
   {
@@ -23,4 +29,5 @@ const allBlogs = async () => {
 module.exports = {
   initialBlogs,
   allBlogs,
+  // initialUsers,
 };
