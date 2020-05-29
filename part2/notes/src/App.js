@@ -4,7 +4,6 @@ import noteService from "./services/notes";
 import loginService from "./services/login";
 import Notification from "./components/Notification";
 import Footer from "./components/Footer";
-import LoginForm from "./components/LoginForm";
 
 const App = () => {
   const [notes, setNotes] = useState([]);
@@ -14,7 +13,6 @@ const App = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
-  const [loginVisible, setLoginVisible] = useState(false);
 
   useEffect(() => {
     noteService.getAll().then((res) => setNotes(res));
@@ -88,17 +86,36 @@ const App = () => {
     }
   };
 
+  const loginForm = () => (
+    <form onSubmit={handleLogin}>
+      <div>
+        username
+        <input
+          type="text"
+          value={username}
+          name="Username"
+          onChange={({ target }) => setUsername(target.value)}
+        />
+      </div>
+      <div>
+        password
+        <input
+          type="password"
+          value={password}
+          name="Password"
+          onChange={({ target }) => setPassword(target.value)}
+        />
+      </div>
+      <button type="submit">Login</button>
+    </form>
+  );
+
   const noteForm = () => (
     <form onSubmit={addNote}>
       <input value={newNote} onChange={handleNoteChange} />
       <button type="submit">save</button>
     </form>
   );
-
-  const loginForm = () => {
-    const hideWhenVisible = { display: loginVisible ? "none" : "" };
-    const showWhenVisible = { display: loginVisible ? "" : "none" };
-  };
 
   const notesToShow = showAll
     ? notes
@@ -109,21 +126,15 @@ const App = () => {
       <h1>Notes</h1>
       <Notification message={errorMessage} />
 
-      <div>
-        <div style={hideWhenVisible}>
-          <button onClick={() => setLoginVisible(true)}>log in</button>
+      {user === null ? (
+        loginForm()
+      ) : (
+        <div>
+          <p>{user.name} logged in</p>
+          {noteForm()}
         </div>
-        <div style={showWhenVisible}>
-          <LoginForm
-            username={username}
-            password={password}
-            handleUsernameChange={({ target }) => setUsername(target.value)}
-            handlePasswordChange={({ target }) => setPassword(target.value)}
-            handleSubmit={handleLogin}
-          />
-          <button onClick={() => setLoginVisible(false)}>cancel</button>
-        </div>
-      </div>
+      )}
+
       <div>
         <button onClick={() => setShowAll(!showAll)}>
           show {showAll ? "important" : "all"}
