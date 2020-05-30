@@ -1,0 +1,11 @@
+.ok {
+  border: 5px solid green;
+  background: lightgray;
+  color: green;
+}
+
+.error {
+  border: 5px solid red;
+  background: gray;
+  color: red;
+}
